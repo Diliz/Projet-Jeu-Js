@@ -1,0 +1,12 @@
+{
+  type: "map",
+  id: 1,
+  map: [
+    {
+      1: ['formation', 1],
+      2: ['formation', 2],
+      3: ['formation', 1],
+      4: ['boss', 1]
+    }
+  ]
+}
