@@ -1,57 +1,59 @@
 (function (window) {
 
-	function Ennemy(size) {
-		this.Shape_constructor(); // super call
-
-		this.activate(size);
+	function Ennemy(ennemyId) {
+		this.Shape_constructor();
+		this.ennemyId = ennemyId - 1;
+		this.getShape();
 	}
 
 	var p = createjs.extend(Ennemy, createjs.Shape);
 
-	p.hit;
 	p.size;
+	p.ennemyId;
 	p.spin;
 	p.score;
 	p.active;
+	p.type;
+	p.dir;
 
-	p.getShape = function (size) {
-		this.size = size;
-		this.hit = size;
-
+	p.getShape = function () {
+		this.active = true;
+		this.size = 5;
 		this.graphics.clear();
 		this.graphics.beginStroke("#FFFFFF");
-		this.graphics.moveTo(0, 20 * size).lineTo(20 * size, 20 * size).lineTo(20 * size, 0).lineTo(0, 0).closePath();
-	}
 
-	p.activate = function (size) {
-		this.getShape(size);
-		this.score = (5 - size / 10) * 100;
-		this.active = true;
+		this.size = ennemyModels[this.ennemyId].size;
+		this.graphics.moveTo(ennemyModels[this.ennemyId].shape[0][0], ennemyModels[this.ennemyId].shape[0][1]);
+		for (var i = 1; i < ennemyModels[this.ennemyId].shape.length; i++) {
+			this.graphics.lineTo(ennemyModels[this.ennemyId].shape[i][0], ennemyModels[this.ennemyId].shape[i][1]);
+		}
+		this.graphics.closePath();
+		this.dir = ennemyModels[this.ennemyId].speed;
 	}
 
 	p.tick = function (event) {
-		this.x -= 5;
+		this.x -= this.dir;
 	}
 
 	p.floatOnScreen = function (width, height) {
-				this.x = width;
-    		this.y = Math.random() * 620 + 20;
+		this.x = width;
+		this.y = height;
 	}
 
 	p.hitRadius = function (tX, tY, tHit) {
-		if (tX - tHit > this.x + this.hit) {
+		if (tX - tHit > this.x + this.size) {
 			return;
 		}
-		if (tX + tHit < this.x - this.hit) {
+		if (tX + tHit < this.x - this.size) {
 			return;
 		}
-		if (tY - tHit > this.y + this.hit) {
+		if (tY - tHit > this.y + this.size) {
 			return;
 		}
-		if (tY + tHit < this.y - this.hit) {
+		if (tY + tHit < this.y - this.size) {
 			return;
 		}
-		return this.hit + tHit > Math.sqrt(Math.pow(Math.abs(this.x - tX), 2) + Math.pow(Math.abs(this.y - tY), 2));
+		return this.size + tHit > Math.sqrt(Math.pow(Math.abs(this.x - tX), 2) + Math.pow(Math.abs(this.y - tY), 2));
 	}
 
 	window.Ennemy = createjs.promote(Ennemy, "Shape");

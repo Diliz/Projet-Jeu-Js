@@ -1,7 +1,14 @@
-var stage;
-
 function init() {
-    pause = false;
+    pause = 1;
+    bossSpawned = false;
+    escapeDown = false;
+    wave = 0;
+    map = 1;
+    mapModels = [];
+    formationsModels = [];
+    ennemyModels = [];
+    bossModels = [];
+    hero = [];
     canvas = document.getElementById("shooter");
     stage = new createjs.Stage(canvas);
     messageField = new createjs.Text("Loading", "bold 24px Arial", "#FFFFFF");
@@ -12,9 +19,37 @@ function init() {
     messageField.y = canvas.height / 2;
     stage.addChild(messageField);
     stage.update();
-    $.getJSON( "js/models/formation-1.json?callback=jsoncallback", function( json ) {
-        console.log( "JSON Data: " + JSON.stringify(json) );
-    });
+    var jsonTest;
+    var jsonTypes = ["formation-", "boss-", "map-","ennemy-", "hero"];
+    var j = 0;
+    for (i = 1; i <= 3; i++) {
+      if (i == 3) {
+        i = 1;
+        j++;
+      }
+
+      if (jsonTypes[j].toString() == "hero") {
+        $.getJSON('js/models/' + jsonTypes[j].toString() + '.json', function(json){hero = json;});
+        break;
+      } else {
+        $.getJSON('js/models/' + jsonTypes[j].toString() + i.toString() +'.json', function(json){
+          switch(json.type){
+             case "ennemy":
+               ennemyModels.push(json);
+               break;
+             case "boss":
+               bossModels.push(json);
+               break;
+             case "formation":
+               formationsModels.push(json);
+               break;
+             case "map":
+               mapModels.push(json);
+               break;
+           }
+        });
+      }
+    };
     var assetsPath = "sounds/";
     soundSources = [
       {id: "begin", src: "spawn.ogg"},
@@ -48,18 +83,44 @@ function restart() {
   ennemies = [];
   bullets = [];
 
+  pause = 1;
+  wave = 0;
+  bossSpawned = false;
+  escapeDown = false;
   alive = true;
   ship = new Ship();
   ship.x = canvas.width / 2;
   ship.y = canvas.height / 2;
 
-  nextEnnemy = nextBullet = 0;
+  nextWave = nextBullet = 0;
 
   shoot = left = right = up = down = false;
 
   stage.clear();
   stage.addChild(ship);
+  createjs.Ticker.setFPS(60);
+  if (!createjs.Ticker.hasEventListener("tick")) {
+    createjs.Ticker.addEventListener("tick", tick);
+  }
+}
 
+function changeMap() {
+  stage.removeAllChildren();
+  ennemies = [];
+  bullets = [];
+
+  map++;
+  wave = 0;
+  pause = 1;
+  bossSpawned = false;
+  escapeDown = false;
+
+  nextWave = nextBullet = 0;
+
+  stage.clear();
+  stage.addChild(ship);
+
+  createjs.Ticker.setFPS(60);
   if (!createjs.Ticker.hasEventListener("tick")) {
     createjs.Ticker.addEventListener("tick", tick);
   }

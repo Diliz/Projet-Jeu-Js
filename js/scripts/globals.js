@@ -1,8 +1,8 @@
 	var BULLET_TIME = 5;
-	var BULLET_ENTROPY = 50;
-	var BULLET_SPEED = 17;
+	var BULLET_SPEED = 15;
 
 	var KEYCODE_ENTER = 13;
+	var KEYCODE_ESCAPE = 89;
 	var KEYCODE_SPACE = 32;
 	var KEYCODE_UP = 38;
 	var KEYCODE_LEFT = 37;
@@ -13,10 +13,22 @@
 	var KEYCODE_D = 68;
 	var KEYCODE_S = 83;
 
-	var manifest;
-	var preload;
-	var pause;
+	var escapeDown;
 
+	var stage;
+	var canvas;
+
+	var manifest;
+	var models;
+	var preload;
+
+	var mapModels;
+	var formationsModels;
+	var ennemyModels;
+	var bossModels;
+	var hero;
+
+	var pause;
 	var shoot;
 	var left;
 	var right;
@@ -26,14 +38,17 @@
 	var bullets;
 	var nextBullet;
 
-	var ennemies;
-	var nextEnnemy;
-
-	var canvas;
-	var stage;
+	var wave;
+	var map;
 
 	var ship;
 	var alive;
+
+	var ennemies;
+	var nextWave;
+
+	var boss;
+	var bossSpawned;
 
 	var messageField;
 	var scoreField;

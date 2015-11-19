@@ -5,8 +5,6 @@ function getBullet() {
   while (i <= len) {
     if (!bullets[i]) {
       bullets[i] = new createjs.Shape();
-      break;
-    } else if (!bullets[i].active) {
       bullets[i].active = true;
       break;
     } else {
@@ -22,25 +20,24 @@ function getBullet() {
   return i;
 }
 
-function getEnnemies(size) {
+function getEnnemies(wave) {
   var i = 0;
-  var len = ennemies.length;
-
-  while (i <= len) {
-    if (!ennemies[i]) {
-      ennemies[i] = new Ennemy(size);
-      break;
-    } else if (!ennemies[i].active) {
-      ennemies[i].activate(size);
-      break;
-    } else {
-      i++;
+  var test = formationsModels[(mapModels[map - 1].map[wave][1]) - 1];
+  var rand = Math.random() * 500 + 20;
+  for (var i = 0; i < test.lines; i++) {
+    for (var j = 0; j < test.columns; j++) {
+      if (test.formation[i][j] > 0) {
+        ennemies[(i * test.columns) + wave + j] = new Ennemy(test.formation[i][j]);
+        ennemies[(i * test.columns) + wave + j].getShape();
+        stage.addChild(ennemies[(i * test.columns) + wave + j]); 
+        ennemies[(i * test.columns) + wave + j].floatOnScreen(canvas.width + (j * 20), rand + (i * 20));
+      }
     }
   }
+  return;
+}
 
-  if (len == 0) {
-    ennemies[0] = new Ennemy(size);
-  }
-  stage.addChild(ennemies[i]);
-  return i;
+function getBoss(map) {
+  console.log("boss");
+  return 1;
 }

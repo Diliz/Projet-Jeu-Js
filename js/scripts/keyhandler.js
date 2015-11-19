@@ -4,7 +4,6 @@ function handleKeyDown(e) {
   }
   switch (e.keyCode) {
     case KEYCODE_SPACE:
-    // case GAMEPAD_A:
       shoot = true;
       return false;
     case KEYCODE_Q:
@@ -26,6 +25,18 @@ function handleKeyDown(e) {
     case KEYCODE_ENTER:
       if (canvas.onclick == handleClick) {
         handleClick();
+      }
+      return false;
+    case KEYCODE_ESCAPE:
+      if (escapeDown == false) {
+        if (pause > 0) {
+          messageField.text = "Pause";
+          stage.addChild(messageField);
+        } else {
+          stage.removeChild(messageField);
+        }
+        pause *= -1;
+        escapeDown = true;
       }
       return false;
   }
@@ -54,6 +65,11 @@ function handleKeyUp(e) {
     case KEYCODE_Z:
     case KEYCODE_UP:
       up = false;
+      break;
+    case KEYCODE_ESCAPE:
+      if (escapeDown == true) {
+        escapeDown = false;
+      }
       break;
   }
 }
