@@ -5,10 +5,13 @@ function init() {
     wave = 0;
     map = 1;
     mapModels = [];
+    bonusModels = [];
     formationsModels = [];
     ennemyModels = [];
     bossModels = [];
-    hero = [];
+    boss = [];
+    bonus = [];
+    nextEnnemyBullet = [];
     canvas = document.getElementById("shooter");
     stage = new createjs.Stage(canvas);
     messageField = new createjs.Text("Loading", "bold 24px Arial", "#FFFFFF");
@@ -20,7 +23,7 @@ function init() {
     stage.addChild(messageField);
     stage.update();
     var jsonTest;
-    var jsonTypes = ["formation-", "boss-", "map-","ennemy-", "hero"];
+    var jsonTypes = ["formation-", "boss-", "map-","ennemy-", "bonus-", "hero"];
     var j = 0;
     for (i = 1; i <= 3; i++) {
       if (i == 3) {
@@ -46,42 +49,47 @@ function init() {
              case "map":
                mapModels.push(json);
                break;
+             case "bonus":
+               bonusModels.push(json);
+               break;
            }
         });
       }
     };
-    var assetsPath = "sounds/";
     soundSources = [
-      {id: "begin", src: "spawn.ogg"},
-      {id: "break", src: "break.ogg", data: 6},
-      {id: "death", src: "death.ogg"},
-      {id: "laser", src: "shot.ogg", data: 6},
-      {id: "music", src: "music.ogg"}
+      {id: "music", src: "sounds/music.ogg"},
+      {id: "begin", src: "sounds/spawn.ogg"},
+      {id: "death", src: "sounds/death.ogg"},
+      {id: "laser", src: "sounds/shot.ogg"},
+      {id: "break", src: "sounds/break.ogg"}
     ];
 
     createjs.Sound.alternateExtensions = ["mp3"];
-    preload = new createjs.LoadQueue(true, assetsPath);
+    preload = new createjs.LoadQueue();
     preload.installPlugin(createjs.Sound);
+    preload.loadFile({id:"begin", src:"sounds/spawn.ogg"});
+    preload.loadFile({id:"music", src:"sounds/music.ogg"});
+    preload.loadFile({id:"death", src:"sounds/death.ogg"});
+    preload.loadFile({id:"laser", src:"sounds/shot.ogg"});
+    preload.loadFile({id:"break", src:"sounds/break.ogg"});
+    // preload.loadManifest(soundSources);
     preload.addEventListener("progress", updateLoading());
     preload.addEventListener("complete", doneLoading());
-    preload.loadManifest(manifest);
     stage.update();
-}
-
-function stop() {
-  if (preload != null) {
-    preload.close();
-  }
-  createjs.Sound.stop();
 }
 
 function restart() {
   stage.removeAllChildren();
   scoreField.text = "Score: 0";
   stage.addChild(scoreField);
+  lifeField.text = "Life points: 5";
+  stage.addChild(lifeField);
 
   ennemies = [];
+  boss = [];
   bullets = [];
+  bulletsEnnemies = [];
+  bulletsBoss = [];
 
   pause = 1;
   wave = 0;
@@ -92,8 +100,8 @@ function restart() {
   ship.x = canvas.width / 2;
   ship.y = canvas.height / 2;
 
-  nextWave = nextBullet = 0;
-
+  nextEnnemyBullet = [];
+  nextWave = nextBullet = nextBossBullet = 0;
   shoot = left = right = up = down = false;
 
   stage.clear();
@@ -105,23 +113,35 @@ function restart() {
 }
 
 function changeMap() {
-  stage.removeAllChildren();
   ennemies = [];
   bullets = [];
+  boss = [];
+  bulletsEnnemies = [];
+  bulletsBoss = [];
 
   map++;
   wave = 0;
-  pause = 1;
   bossSpawned = false;
   escapeDown = false;
 
-  nextWave = nextBullet = 0;
+  nextEnnemyBullet = [];
 
-  stage.clear();
+  nextWave = nextBullet = nextBossBullet = 0;
+  shoot = left = right = up = down = false;
+
+  stage.removeChild(messageField);
+  stage.update();
+
   stage.addChild(ship);
 
   createjs.Ticker.setFPS(60);
   if (!createjs.Ticker.hasEventListener("tick")) {
     createjs.Ticker.addEventListener("tick", tick);
   }
+}
+
+function theEnd() {
+  stage.removeAllChildren();
+  stage.update();
+  stop();
 }

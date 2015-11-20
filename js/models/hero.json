@@ -1,6 +1,8 @@
 {
   "type": "hero",
   "id": 1,
+  "lives": 5,
+  "size": 22,
   "shape":
 	[
 		[0,10],

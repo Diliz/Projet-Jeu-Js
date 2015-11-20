@@ -1,5 +1,9 @@
-	var BULLET_TIME = 5;
+	var BULLET_TIME = 8;
+	var BULLET_ENNEMY_TIME = 150;
 	var BULLET_SPEED = 15;
+	var BULLET_ENNEMY_SPEED = 5;
+	var BULLET_BOSS_TIME = 100;
+	var BULLET_BOSS_SPEED = 7;
 
 	var KEYCODE_ENTER = 13;
 	var KEYCODE_ESCAPE = 89;
@@ -26,6 +30,7 @@
 	var formationsModels;
 	var ennemyModels;
 	var bossModels;
+	var bonusModels;
 	var hero;
 
 	var pause;
@@ -35,10 +40,16 @@
 	var up;
 	var down;
 
+	var bonus;
 	var bullets;
+	var bulletsBoss;
+	var bulletsEnnemies;
 	var nextBullet;
+	var nextEnnemyBullet;
+	var nextBossBullet;
 
 	var wave;
+	var lastWave;
 	var map;
 
 	var ship;
@@ -52,6 +63,7 @@
 
 	var messageField;
 	var scoreField;
+	var lifeField;
 
 	var loadingInterval = 0;
 

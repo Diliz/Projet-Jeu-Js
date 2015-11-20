@@ -80,3 +80,17 @@ function handleClick() {
   createjs.Sound.play("begin");
   restart();
 }
+
+function handleChange() {
+  canvas.onclick = null;
+  stage.removeChild(messageField);
+  createjs.Sound.play("begin");
+  changeMap();
+}
+
+function handleEnd() {
+  canvas.onclick = null;
+  stage.removeChild(messageField);
+  createjs.Sound.play("begin");
+  theEnd();
+}

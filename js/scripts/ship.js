@@ -13,7 +13,8 @@
 
 	p.shipBody;
 	p.hit;
-  	p.lives = 5;
+	p.size;
+  	p.lives;
 
 	p.makeShape = function () {
 		var graphics = this.shipBody.graphics;
@@ -28,6 +29,8 @@
 
 		this.shipBody.rotation -= 90;
 		this.hit = 2;
+		this.size = hero.size;
+		this.lives = hero.lives;
 	}
 
 	p.tick = function (event) {
@@ -43,6 +46,22 @@
 	    if (right == true && this.x < 400) {
 	      this.x += 5;
 	    }
+	}
+
+	p.hitRadius = function (tX, tY, tHit) {
+		if (tX - tHit > this.x + this.size) {
+			return;
+		}
+		if (tX + tHit < this.x - this.size) {
+			return;
+		}
+		if (tY - tHit > this.y + this.size) {
+			return;
+		}
+		if (tY + tHit < this.y - this.size) {
+			return;
+		}
+		return this.size + tHit > Math.sqrt(Math.pow(Math.abs(this.x - tX), 2) + Math.pow(Math.abs(this.y - tY), 2));
 	}
 
 	window.Ship = createjs.promote(Ship, "Container");

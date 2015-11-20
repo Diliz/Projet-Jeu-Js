@@ -1,11 +1,5 @@
 {
   "type": "map",
   "id": 1,
-  "map":
-  	[
-		["formation", 1],
-		["formation", 2],
-    	["formation", 1],
-    	["boss", 1]
-    ]
+  "map": [1, 2, 2, 1, 1, 1]
 }
