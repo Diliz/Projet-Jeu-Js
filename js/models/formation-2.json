@@ -1,0 +1,12 @@
+{
+  "type": "formation",
+  "id": 2,
+  "columns": 3,
+  "lines": 3,
+  "formation":
+    [
+      [0,2,2],
+      [2,0,0],
+      [0,2,2]
+    ]
+}
